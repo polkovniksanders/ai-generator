@@ -1,45 +1,50 @@
+import { UserProps } from "../user/user.types";
+
 export async function generatePersonDescription(
-  firstName,
-  lastName,
-  age,
-  profession,
-) {
+  user: UserProps,
+): Promise<string> {
+  const { name, surname, age, profession } = user;
+
   const prompt = `
     Сгенерируй краткое, но интересное описание человека на основе следующих данных:
-    - Имя: ${firstName}
-    - Фамилия: ${lastName}
+    - Имя: ${name}
+    - Фамилия: ${surname}
     - Возраст: ${age || "не указан"}
     - Профессия: ${profession || "не указана"}
     Описание должно включать возможные увлечения, черты характера и профессиональные достижения (если есть данные). Можешь использовать юмор в ответе
   `;
 
-  const response = await fetch("https://text.pollinations.ai/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      messages: [{ role: "user", content: prompt }],
-      model: "openai",
-      private: true, // Response won't appear in public feed
-    }),
-  });
+  let retryCount = 0;
+  while (retryCount < 3) {
+    const response = await fetch("https://text.pollinations.ai/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        model: "openai",
+        private: true,
+      }),
+    });
 
-  const data = await response.text();
+    if (response.status === 429) {
+      await new Promise((r) => setTimeout(r, 2500));
+      retryCount++;
+      continue;
+    }
 
-  return data;
+    return await response.text();
+  }
+  throw new Error("Too many requests. Please try again later.");
 }
 
-export async function generatePersonImage(description) {
+export async function generatePersonImage(description: string) {
   const prompt = description;
-  const width = 500;
-  const height = 500;
+  const width = 400;
+  const height = 400;
   const seed = 42;
   const model = "flux";
 
-  const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=${width}&height=${height}&seed=${seed}&model=${model}`;
-
-  const data = imageUrl;
-
-  return data;
+  return `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=${width}&height=${height}&seed=${seed}&model=${model}`;
 }

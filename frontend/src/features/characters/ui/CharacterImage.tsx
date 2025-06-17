@@ -1,10 +1,15 @@
 import styled from 'styled-components';
+import type { FC } from 'react';
 
-export const CharacterImage = props => {
-    const { src } = props;
+export const CharacterImage: FC<{ src: string }> = ({ src }) => {
+    if (!src) return;
 
     return (
-        <div>
+        <div
+            style={{
+                paddingBottom: '100px',
+            }}
+        >
             <StyledImage src={src} alt='person' />
         </div>
     );

@@ -25,15 +25,12 @@ export class UserController {
       });
 
       const isKnown = biasedRandomBoolean();
+      const description = await generatePersonDescription(user);
 
-      const description = await generatePersonDescription(
-        user.name,
-        user.surname,
-        user.age,
-        user?.profession,
-      );
+      user.isKnown = isKnown;
+      user.description = description;
 
-      res.status(201).json({ user, description, isKnown });
+      res.status(201).json({ user });
     } catch (error) {
       console.error("createUser error:", error);
       res.status(500).json({ error: "Ошибка сервера" });
@@ -60,7 +57,8 @@ export class UserController {
 
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await userService.getAllUsers();
+      let users = await userService.getAllUsers();
+      users = users.sort((a, b) => b.id - a.id);
       res.json(users);
     } catch (error) {
       res.status(500).json({ error: "Ошибка сервера" });

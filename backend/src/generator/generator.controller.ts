@@ -15,12 +15,8 @@ export class GeneratorController {
     try {
       const user = await userService.getUser(uuid);
 
-      const description = await generatePersonDescription(
-        user.name,
-        user.surname,
-        user.age,
-        user.profession,
-      );
+      const description =
+        user?.description ?? (await generatePersonDescription(user));
 
       res.status(201).json({ description: description });
     } catch (error) {
