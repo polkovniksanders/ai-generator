@@ -4,7 +4,7 @@ export const About = () => {
     const title = 'Что умеет это приложение?';
 
     const description =
-        'Приложение определяет знает ли Алена этого человека или нет. Нажми кнопку, чтобы проверить';
+        'Приложение определяет знает ли Алена этого человека или нет';
 
     return (
         <>
@@ -19,7 +19,7 @@ const StyledTitle = styled.h2`
     color: ${({ theme }) => theme.colors.white};
 `;
 
-const StyledDescription = styled.p`
+const StyledDescription = styled.h4`
     text-align: center;
     color: ${({ theme }) => theme.colors.white};
 `;

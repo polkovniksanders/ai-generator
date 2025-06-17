@@ -16,11 +16,14 @@ export const GlobalStyle = createGlobalStyle`
     }
     
     body {
-        height: 100vh;
         width: 100vw;
         margin: 0;
-        overflow: hidden;
         font-family: "Zen Maru Gothic", sans-serif;
+        background-color: #333;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 80px 80px;
+        padding: 100px clamp(16px, 6vw, 160px);
+
     }
     
     p, h4 {margin: 0}

@@ -31,7 +31,7 @@ export const GeneratorForm = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            navigate(`${data?.user.uuid}`);
+            navigate(`/characters/${data?.user.uuid}`);
         }
     }, [isSuccess, data, navigate]);
 
