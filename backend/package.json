@@ -27,6 +27,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "winston": "^3.17.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
 
