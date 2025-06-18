@@ -1,18 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "dev": "ts-node src/server.ts",
-    "build": "tsc",
+    "build": "npx prisma migrate deploy && tsc",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@prisma/client": "^6.9.0",
     "cors": "^2.8.5",
@@ -25,11 +20,11 @@
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.29",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
-    "winston": "^3.17.0"
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": "20.x"
-  }
+  },
+  "description": "Backend for AI Generator project",
+  "author": "Слава"
 }
-
