@@ -1,14 +1,12 @@
 {
-  "target": "ES2020",
-  "module": "CommonJS",
-  "rootDir": "./src",
-  "outDir": "./dist",
-  "esModuleInterop": true,
-  "strict": true,
-  "skipLibCheck": true,
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "module": "CommonJS"
+    "strict": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
   }
 }

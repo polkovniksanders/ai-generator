@@ -8,8 +8,8 @@
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "fix-uuid": "ts-node scripts/fix-uuid.ts",
-    "fix-isknown": "ts-node scripts/setAllUsersKnown.ts"
+    "fix-uuid": "ts-node src/scripts/fix-uuid.ts",
+    "fix-isknown": "ts-node src/scripts/setAllUsersKnown.ts"
   },
   "keywords": [],
   "author": "",

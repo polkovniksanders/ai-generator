@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const usersWithoutUuid = await prisma.user.findMany({
-    where: { uuid: null },
+    where: { uuid: undefined },
   });
 
   for (const user of usersWithoutUuid) {

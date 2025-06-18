@@ -1,8 +1,6 @@
-import { UserProps } from "../user/user.types";
+import { UserExtraProps, UserProps } from "../user/user.types";
 
-export async function generatePersonDescription(
-  user: UserProps,
-): Promise<string> {
+export async function generatePersonDescription(user: any): Promise<string> {
   const { name, surname, age, profession } = user;
 
   const prompt = `
