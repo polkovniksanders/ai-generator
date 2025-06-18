@@ -28,13 +28,13 @@ app.post("/api/generate-image", (req, res) =>
   generateController.generateCharacterImage(req, res),
 );
 
-const PORT = process.env.PORT!;
+const PORT = process.env.PORT || 3000;
 
 async function main() {
   try {
     await prisma.$connect();
     app.listen(PORT, () => {
-      console.log(`Server running at ${PORT}`);
+      console.log(`Server started on port ${PORT}`);
     });
   } catch (e) {
     await prisma.$disconnect();
