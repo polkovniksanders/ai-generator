@@ -7,9 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push",
-    "fix-uuid": "ts-node src/scripts/fix-uuid.ts",
-    "fix-isknown": "ts-node src/scripts/setAllUsersKnown.ts"
+    "prisma:push": "prisma db push"
   },
   "keywords": [],
   "author": "",
