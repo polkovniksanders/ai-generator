@@ -4,7 +4,9 @@ import type { UserProps } from './users.types.ts';
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_API_URL,
+        //baseUrl: import.meta.env.VITE_API_URL,
+        baseUrl: 'http://localhost:3000/api',
+
         headers: { 'Content-Type': 'application/json' },
     }),
     endpoints: builder => ({

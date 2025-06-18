@@ -2,10 +2,6 @@ import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import { generatePersonDescription } from "../generator/generator.service";
 
-function biasedRandomBoolean(): boolean {
-  return Math.random() < 0.85;
-}
-
 const userService = new UserService();
 
 export class UserController {
@@ -24,10 +20,9 @@ export class UserController {
         profession,
       });
 
-      const isKnown = biasedRandomBoolean();
       const description = await generatePersonDescription(user);
 
-      user.isKnown = isKnown;
+      user.isKnown = Math.random() < 0.85;
       user.description = description;
 
       res.status(201).json({ user });

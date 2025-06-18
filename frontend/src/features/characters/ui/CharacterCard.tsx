@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import styled from 'styled-components';
-import { CharacterImage } from './CharacterImage';
 
 export const CharacterCard = ({
     uuid,
