@@ -1,12 +1,12 @@
-import type { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import { Navigation } from '../features/navigation/ui/Navigation';
+import { Outlet } from 'react-router-dom';
 
-export const CommonLayout: FC<PropsWithChildren> = ({ children }) => {
+export const CommonLayout = () => {
     return (
         <StyledLayout>
-            {children}
             <Navigation />
+            <Outlet />
         </StyledLayout>
     );
 };
