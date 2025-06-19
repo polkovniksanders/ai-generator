@@ -1,31 +1,30 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import { generatePersonDescription } from "../generator/generator.service";
+import { createUserSchema } from "./user.dto";
+import { setIsKnown } from "../utils/setIsKnown";
 
 const userService = new UserService();
 
 export class UserController {
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const { name, surname, age, profession } = req.body;
-      if (!name || !surname || age === undefined || age === null) {
-        res.status(400).json({ error: "name, surname и age обязательны" });
+      const parseResult = createUserSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        res.status(400).json({ error: parseResult.error.errors });
         return;
       }
 
-      const user = await userService.createUser({
-        name,
-        surname,
-        age,
-        profession,
-      });
+      const payload = {
+        ...parseResult.data,
+        isKnown: setIsKnown(),
+      };
+
+      const user = await userService.createUser(payload);
 
       const description = await generatePersonDescription(user);
 
-      user.isKnown = Math.random() < 0.85;
-      user.description = description;
-
-      res.status(201).json({ user });
+      res.status(201).json({ user: { ...user, description } });
     } catch (error) {
       console.error("createUser error:", error);
       res.status(500).json({ error: "Ошибка сервера" });
