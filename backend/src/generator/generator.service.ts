@@ -1,4 +1,4 @@
-import { UserExtraProps, UserProps } from "../user/user.types";
+import { User } from "@prisma/client";
 
 export async function generatePersonDescription(user: any): Promise<string> {
   const { name, surname, age, profession } = user;
