@@ -1,14 +1,11 @@
 import { PrismaClient, User } from "@prisma/client";
+import { CreateUserDto, createUserSchema } from "./user.dto";
 
 const prisma = new PrismaClient();
 
 export class UserService {
-  async createUser(data: {
-    name: string;
-    surname: string;
-    age: number;
-    profession?: string;
-  }): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<User> {
+    const data: CreateUserDto = createUserSchema.parse(user);
     return prisma.user.create({ data });
   }
 
