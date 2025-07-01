@@ -9,7 +9,7 @@ export default defineConfig({
         allowedHosts: ['berghub.online', 'localhost', '127.0.0.1'],
         proxy: {
             '/api': {
-                target: 'http://localhost:3001',
+                target: 'https://ai-generator-backend-3vgu.onrender.com',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, ''),
             },

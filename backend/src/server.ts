@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
 // CORS config
-const allowedOrigins = ["https://az-opal.vercel.app"];
+const allowedOrigins = ["https://az-opal.vercel.app", "http://localhost:8080"];
 app.use(
   cors({
     origin: allowedOrigins,
