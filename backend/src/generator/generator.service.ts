@@ -1,5 +1,3 @@
-import { User } from "@prisma/client";
-
 export async function generatePersonDescription(user: any): Promise<string> {
   const { name, surname, age, profession } = user;
 
@@ -9,32 +7,19 @@ export async function generatePersonDescription(user: any): Promise<string> {
     - Фамилия: ${surname}
     - Возраст: ${age || "не указан"}
     - Профессия: ${profession || "не указана"}
-    Описание должно включать возможные увлечения, черты характера и профессиональные достижения (если есть данные). Можешь использовать юмор в ответе
+    Описание должно включать возможные увлечения, черты характера и профессиональные достижения (если есть данные). Можно с юмором, добавь хобби и характер.
   `;
 
-  let retryCount = 0;
-  while (retryCount < 3) {
-    const response = await fetch("https://text.pollinations.ai/", {
+  const response = await fetch(
+    "https://hf.space/embed/mistralai/Mixtral-8x7B-Instruct-v0.1/api/predict",
+    {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messages: [{ role: "user", content: prompt }],
-        model: "openai",
-        private: true,
-      }),
-    });
-
-    if (response.status === 429) {
-      await new Promise((r) => setTimeout(r, 2500));
-      retryCount++;
-      continue;
-    }
-
-    return await response.text();
-  }
-  throw new Error("Too many requests. Please try again later.");
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [prompt] }),
+    },
+  );
+  const result = await response.json();
+  return result.data?.[0] || "";
 }
 
 export async function generatePersonImage(description: string) {

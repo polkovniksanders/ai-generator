@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
     useCreateCharacterImageMutation,
     useLazyGetCharacterQuery,
@@ -11,34 +11,33 @@ import { CharacterImage } from '../../../features/characters/ui/CharacterImage';
 export const CharacterPage = () => {
     const { uuid } = useParams();
 
-    const [getUser, { data }] = useLazyGetUserQuery();
-
+    const [getUser, { data: user }] = useLazyGetUserQuery();
     const [getCharacter, { data: character }] = useLazyGetCharacterQuery();
     const [createCharacterImage, { data: image }] =
         useCreateCharacterImageMutation();
 
     useEffect(() => {
         if (uuid) {
-            getUser(uuid);
-            getCharacter(uuid);
+            getUser(uuid, true);
+            getCharacter(uuid, true);
         }
     }, [uuid, getUser, getCharacter]);
 
     useEffect(() => {
-        if (character) {
+        if (character?.description) {
             createCharacterImage(character.description);
         }
-    }, [character]);
+    }, [character, createCharacterImage]);
 
     return (
         <div
             style={{
                 overflow: 'scroll',
                 height: '100vh',
-                paddingBottom: '90x',
+                paddingBottom: '90px',
             }}
         >
-            <CharacterCard {...data} description={character?.description} />
+            <CharacterCard {...user} description={character?.description} />
             <CharacterImage src={image?.image} />
         </div>
     );
