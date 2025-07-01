@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import { generatePersonDescription } from "../generator/generator.service";
 import { createUserSchema } from "./user.dto";
-import { setIsKnown } from "../utils/setIsKnown";
 
 const userService = new UserService();
 
@@ -17,7 +16,6 @@ export class UserController {
 
       const payload = {
         ...parseResult.data,
-        isKnown: setIsKnown(),
       };
 
       const user = await userService.createUser(payload);

@@ -8,7 +8,6 @@ export const CharacterCard = ({
     age,
     profession,
     description,
-    isKnown,
 }) => {
     return (
         <StyledUserCard>
@@ -36,12 +35,6 @@ export const CharacterCard = ({
                         <StyledText>{description}</StyledText>
                     </StyledDescription>
                 )}
-
-                <StyledNames>
-                    <StyledKnown $isKnown={isKnown}>
-                        Алена {isKnown ? 'знает' : 'не знает'} {name} {surname}
-                    </StyledKnown>
-                </StyledNames>
             </StyledWrapper>
         </StyledUserCard>
     );
@@ -50,11 +43,6 @@ export const CharacterCard = ({
 const StyledDescription = styled.div`
     display: flex;
     flex-direction: column;
-`;
-
-const StyledKnown = styled.h4<{ $isKnown: boolean }>`
-    color: ${({ theme, $isKnown }) =>
-        $isKnown ? theme.colors.success : theme.colors.error};
 `;
 
 const StyledNames = styled.div`

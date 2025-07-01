@@ -15,6 +15,5 @@ model User {
   age         Int
   profession  String?
   description String? // Новое поле для описания пользователя
-  isKnown     Boolean  @default(false)
   createdAt   DateTime @default(now())
 }

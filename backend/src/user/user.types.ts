@@ -13,6 +13,5 @@ export interface UserExtraProps {
   age: number;
   profession?: string | null;
   description?: string | null;
-  isKnown?: boolean;
   createdAt?: Date;
 }
