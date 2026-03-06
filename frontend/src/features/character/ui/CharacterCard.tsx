@@ -125,6 +125,7 @@ const CardHeader = styled.div`
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.gaps.md}px;
+    flex-wrap: wrap;
 `;
 
 const Avatar = styled.div`
@@ -147,6 +148,7 @@ const Identity = styled.div`
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    flex: 1;
 `;
 
 const FullName = styled.h3`
@@ -177,6 +179,14 @@ const Actions = styled.div`
     gap: 6px;
     margin-left: auto;
     flex-shrink: 0;
+
+    @media (max-width: 480px) {
+        order: 3;
+        margin-left: 0;
+        width: 100%;
+        padding-top: ${({ theme }) => theme.gaps.sm}px;
+        border-top: 1px solid ${({ theme }) => theme.colors.border};
+    }
 `;
 
 const ActionBtn = styled.button<{ $copied?: boolean }>`

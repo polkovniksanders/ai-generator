@@ -123,7 +123,7 @@ const NavInner = styled.div`
     border: 1px solid rgba(99, 102, 241, 0.1);
     border-bottom: none;
     border-radius: 16px 16px 0 0;
-    padding: 8px 16px;
+    padding: 8px 4px;
     max-width: 600px;
     margin: 0 auto;
 `;
@@ -133,7 +133,9 @@ const NavItem = styled(Link)<{ $active: boolean }>`
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 8px 16px;
+    flex: 1;
+    min-width: 0;
+    padding: 8px 4px;
     border-radius: 10px;
     color: ${({ theme, $active }) => ($active ? theme.colors.accentFrom : theme.colors.textMuted)};
     transition: ${({ theme }) => theme.transition};
@@ -154,4 +156,13 @@ const IconWrap = styled.div<{ $active: boolean }>`
 const NavLabel = styled.span<{ $active: boolean }>`
     font-size: 10px;
     font-weight: ${({ $active }) => ($active ? '600' : '400')};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
+
+    @media (max-width: 360px) {
+        font-size: 9px;
+    }
 `;
