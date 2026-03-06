@@ -1,35 +1,38 @@
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import type { FieldProps } from '../../../features/generator/types/generator.types.ts';
 
-interface InputProps extends FieldProps {
-    onBlur: () => void;
-    onChange: () => void;
-    ref: () => void;
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    $hasError?: boolean;
 }
-export const Input = (props: InputProps) => {
-    return <StyledInput {...props} />;
-};
 
-const StyledInput = styled.input`
-    padding: 10px 12px;
-    font-size: 16px;
-    border: 2px solid ${({ theme }) => theme.colors.grey};
-    border-radius: 6px;
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ $hasError, ...props }, ref) => (
+    <StyledInput ref={ref} $hasError={$hasError} {...props} />
+));
+Input.displayName = 'Input';
+
+const StyledInput = styled.input<{ $hasError?: boolean }>`
+    width: 100%;
+    padding: 12px 16px;
+    background: ${({ theme }) => theme.colors.bgElevated};
+    border: 1px solid
+        ${({ theme, $hasError }) => ($hasError ? theme.colors.error : theme.colors.border)};
+    border-radius: ${({ theme }) => theme.radius.md};
+    color: ${({ theme }) => theme.colors.textPrimary};
+    font-family: ${({ theme }) => theme.font.family};
+    font-size: ${({ theme }) => theme.font.size.sm};
+    transition: ${({ theme }) => theme.transition};
     outline: none;
 
-    color: ${({ theme }) => theme.colors.grey};
-    font-weight: 700;
-
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s;
-
-    &:hover {
-        border-color: ${({ theme }) => theme.colors.grey};
+    &::placeholder {
+        color: ${({ theme }) => theme.colors.textMuted};
     }
 
     &:focus {
-        border-color: ${({ theme }) => theme.colors.grey};
-        background: ${({ theme }) => theme.colors.white};
+        border-color: ${({ theme }) => theme.colors.accentFrom};
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    &:hover:not(:focus) {
+        border-color: ${({ theme }) => theme.colors.borderHover};
     }
 `;

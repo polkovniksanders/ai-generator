@@ -1,77 +1,123 @@
 import styled from 'styled-components';
 
-export const PolicyPage = () => {
-    return (
-        <div>
-            <StyleTitle>О проекте</StyleTitle>
+export const PolicyPage = () => (
+    <Page>
+        <Title>О проекте</Title>
 
-            <StyledTextWrapper>
-                <StyledText>
-                    Вся информация на сайте носит ИСКЛЮЧИТЕЛЬНО развлекательный
-                    характер
-                </StyledText>
+        <Section>
+            <SectionTitle>Что это?</SectionTitle>
+            <Text>
+                Приложение генерирует описание и портрет человека на основе имени, фамилии,
+                возраста и профессии. Вся информация создаётся с помощью ИИ и носит
+                исключительно развлекательный характер. Все совпадения случайны.
+            </Text>
+        </Section>
 
-                <StyledText>
-                    🔮 Все совпадения случайны, включая: Ваше присутствие здесь
-                    (мы даже не знаем, реальны ли вы) Эти "факты" (их
-                    генерировал ИИ после трёх чашек робо-кофе) Само понятие
-                    "правда" (её съели мемные единороги){' '}
-                </StyledText>
+        <Section>
+            <SectionTitle>Ограничения</SectionTitle>
+            <Text>
+                Каждый пользователь может создать до 3 персонажей за одну сессию. После
+                этого генерация будет доступна через 4 часа.
+            </Text>
+        </Section>
 
-                <StyledText>
-                    📜 Наши принципы: Любые упоминания людей/событий — чистая
-                    случайность (возможно, их придумал наш тайный алгоритм для
-                    вашего развлечения) Если вы нашли здесь что-то полезное —
-                    это глюк матрицы Даже это предупреждение — часть розыгрыша
-                    (или нет? Мы уже запутались)
-                </StyledText>
+        <Section>
+            <SectionTitle>Технологии</SectionTitle>
+            <TechGrid>
+                {(
+                    [
+                        ['Frontend', 'React 19, Vite, styled-components, Redux Toolkit'],
+                        ['Backend', 'Node.js 20, Express 5, TypeScript, Prisma'],
+                        ['База данных', 'PostgreSQL 16'],
+                        ['AI', 'GPTunnel (text + image)'],
+                        ['Деплой', 'Docker, VPS, GitHub Actions'],
+                    ] as [string, string][]
+                ).map(([name, value]) => (
+                    <TechItem key={name}>
+                        <TechName>{name}</TechName>
+                        <TechValue>{value}</TechValue>
+                    </TechItem>
+                ))}
+            </TechGrid>
+        </Section>
 
-                <StyledText>
-                    ⚠️ Экстренная инструкция: Не верьте глазам (они вас
-                    обманывают с детства) Не пытайтесь найти логику (её заменяет
-                    кот-модератор) Все "пользователи" в комментариях — боты (как
-                    и вы. Шутка. Или нет?) С уважением, Департамент
-                    альтернативной реальности
-                </StyledText>
+        <Disclaimer>
+            ⚠️ Вся информация носит развлекательный характер. Генерации случайны и не
+            связаны с реальными людьми.
+        </Disclaimer>
+    </Page>
+);
 
-                <StyledText>
-                    P.S. Если вы читаете это — поздравляем! Вы тоже часть нашего
-                    эксперимента. Ваш чек на $1,000,000 уже в пути 💸 P.P.S.
-                    Шучу. Или нет? ( ͡° ͜ʖ ͡°) Мини-версия для скептиков: "Всё
-                    здесь — случайный набор пикселей. Ваши эмоции — наш успех.
-                    Люди — миф. Нажмите ❤️, если всё равно верите. (Кнопка тоже
-                    не работает)" Хотите продолжить игру? Напишите "Я
-                    согласен(на) быть вымышленным персонажем" — и получите
-                    виртуальный пряник! 🍪👾
-                </StyledText>
-
-                <StyleTitle>Техническая информация</StyleTitle>
-                <StyledText>
-                    Фронтенд: "react": "^19.1.0", "react-hook-form": "^7.57.0",
-                    "react-redux": "^9.2.0", "styled-components":
-                    "^6.1.18","zod": "^3.25.51"
-                </StyledText>
-
-                <StyledText>
-                    Бэкенд: "ts-node": "^10.9.2","winston": "^3.17.0" "express":
-                    "^5.1.0", "openai": "^5.1.0", "prisma": "^6.9.0"
-                </StyledText>
-            </StyledTextWrapper>
-        </div>
-    );
-};
-
-const StyleTitle = styled.h2`
-    font-weight: ${({ theme }) => theme.font.weight.heavy};
-    color: ${({ theme }) => theme.colors.white};
-`;
-
-const StyledText = styled.p`
-    color: ${({ theme }) => theme.colors.white};
-`;
-
-const StyledTextWrapper = styled.div`
+const Page = styled.div`
+    max-width: 640px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: ${({ theme }) => `${theme.gaps.md}px`};
+    gap: ${({ theme }) => theme.gaps.xl}px;
+`;
+
+const Title = styled.h1`
+    font-size: ${({ theme }) => theme.font.size.xl};
+    font-weight: ${({ theme }) => theme.font.weight.bold};
+    background: ${({ theme }) => theme.colors.gradient};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+`;
+
+const Section = styled.section`
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.gaps.sm}px;
+`;
+
+const SectionTitle = styled.h2`
+    font-size: ${({ theme }) => theme.font.size.md};
+    font-weight: ${({ theme }) => theme.font.weight.semibold};
+    color: ${({ theme }) => theme.colors.textPrimary};
+`;
+
+const Text = styled.p`
+    font-size: ${({ theme }) => theme.font.size.sm};
+    color: ${({ theme }) => theme.colors.textSecondary};
+    line-height: 1.7;
+`;
+
+const TechGrid = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.gaps.xs}px;
+`;
+
+const TechItem = styled.div`
+    display: flex;
+    gap: ${({ theme }) => theme.gaps.md}px;
+    padding: ${({ theme }) => theme.gaps.sm}px ${({ theme }) => theme.gaps.md}px;
+    background: ${({ theme }) => theme.colors.bgSurface};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radius.md};
+`;
+
+const TechName = styled.span`
+    font-size: ${({ theme }) => theme.font.size.xs};
+    font-weight: ${({ theme }) => theme.font.weight.semibold};
+    color: ${({ theme }) => theme.colors.accentFrom};
+    min-width: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+`;
+
+const TechValue = styled.span`
+    font-size: ${({ theme }) => theme.font.size.xs};
+    color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+const Disclaimer = styled.div`
+    padding: ${({ theme }) => theme.gaps.md}px;
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radius.md};
+    font-size: ${({ theme }) => theme.font.size.xs};
+    color: ${({ theme }) => theme.colors.textMuted};
+    line-height: 1.6;
 `;

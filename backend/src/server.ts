@@ -1,77 +1,80 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
-import { UserController } from "./user/user.controller";
-import { GeneratorController } from "./generator/generator.controller";
-
-// Load env variables
-dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { env } from './config/env';
+import { logger } from './shared/logger';
+import { prisma } from './shared/prisma';
+import { UserController } from './modules/user/user.controller';
+import { GeneratorController } from './modules/generator/generator.controller';
+import { SessionController } from './modules/session/session.controller';
+import { rateLimitMiddleware } from './shared/middleware/rate-limit';
 
 const app = express();
-const prisma = new PrismaClient();
-const PORT = process.env.PORT || 3000;
 
-// CORS config
-const allowedOrigins = ["https://az-opal.vercel.app", "http://localhost:8080"];
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: env.CORS_ORIGIN.split(',').map((o) => o.trim()),
     credentials: true,
   }),
 );
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
-// Controllers
+// Trust proxy for correct IP behind nginx
+app.set('trust proxy', 1);
+
 const userController = new UserController();
-const generateController = new GeneratorController();
+const generatorController = new GeneratorController();
+const sessionController = new SessionController();
 
-// User routes
-app.post("/api/users", userController.createUser.bind(userController));
-app.get("/api/users", userController.getUsers.bind(userController));
-app.get("/api/users/:uuid", userController.getUserByUuid.bind(userController));
+// Session endpoint (no rate limit)
+app.get('/api/session', (req, res) => sessionController.getSession(req, res));
+
+// Character routes (POST requires rate limit)
+app.post('/api/characters', rateLimitMiddleware, (req, res) =>
+  userController.createUser(req, res),
+);
+app.get('/api/characters', (req, res) => userController.getUsers(req, res));
+app.get('/api/characters/:uuid', (req, res) => userController.getUserByUuid(req, res));
 
 // Generator routes
-app.get(
-  "/api/generate/:uuid",
-  generateController.generateCharacter.bind(generateController),
+app.get('/api/generate/:uuid', (req, res) =>
+  generatorController.generateCharacter(req, res),
 );
-app.post(
-  "/api/generate-image",
-  generateController.generateCharacterImage.bind(generateController),
+app.post('/api/characters/:uuid/image', (req, res) =>
+  generatorController.generateAndSaveImage(req, res),
 );
 
-// Start server
+// Serve frontend static files in production
+if (env.NODE_ENV === 'production') {
+  const staticPath = path.join(__dirname, '..', 'public');
+  app.use(express.static(staticPath));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(staticPath, 'index.html'));
+  });
+}
+
 async function main() {
   try {
     await prisma.$connect();
-    const server = app.listen(PORT, () => {
-      console.log(`Server started on port ${PORT}`);
+    logger.info('Database connected');
+
+    const server = app.listen(parseInt(env.PORT, 10), () => {
+      logger.info(`Server running on port ${env.PORT} [${env.NODE_ENV}]`);
     });
 
-    process.on("SIGINT", async () => {
-      console.log("Received SIGINT, shutting down gracefully...");
+    const shutdown = async (signal: string) => {
+      logger.info(`${signal} received, shutting down`);
       await prisma.$disconnect();
-      server.close(() => {
-        process.exit(0);
-      });
-    });
+      server.close(() => process.exit(0));
+    };
 
-    process.on("SIGTERM", async () => {
-      console.log("Received SIGTERM, shutting down gracefully...");
-      await prisma.$disconnect();
-      server.close(() => {
-        process.exit(0);
-      });
-    });
-  } catch (e) {
-    console.error("Server start error:", e);
+    process.on('SIGINT', () => shutdown('SIGINT'));
+    process.on('SIGTERM', () => shutdown('SIGTERM'));
+  } catch (err) {
+    logger.error('Server start failed', { error: (err as Error).message });
     await prisma.$disconnect();
     process.exit(1);
   }
 }
 
-main().catch((e) => {
-  console.error("Fatal error in main:", e);
-  process.exit(1);
-});
+main();

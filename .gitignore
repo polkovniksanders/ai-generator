@@ -1,0 +1,27 @@
+# Dependencies
+**/node_modules/
+
+# Build outputs
+**/dist/
+backend/public/
+
+# Environment files
+.env
+.env.local
+**/.env
+**/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript compiled JS in src (only dist should have compiled JS)
+backend/src/**/*.js
+
+# Logs
+*.log
+**/logs/
+
+# IDE
+.vscode/
+.idea/

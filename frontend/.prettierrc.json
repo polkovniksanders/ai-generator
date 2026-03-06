@@ -4,5 +4,7 @@
     "tabWidth": 4,
     "semi": true,
     "jsxSingleQuote": true,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "trailingComma": "all",
+    "printWidth": 100
 }

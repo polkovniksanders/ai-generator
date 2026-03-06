@@ -1,20 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-export function useWindowWidth(): number {
+export const useWindowWidth = (): number => {
     const [width, setWidth] = useState(window.innerWidth);
 
     useEffect(() => {
-        function handleResize() {
-            setWidth(window.innerWidth);
-        }
-
-        window.addEventListener('resize', handleResize);
-
-        // Очистка слушателя при размонтировании
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        const handler = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handler);
+        return () => window.removeEventListener('resize', handler);
     }, []);
 
     return width;
-}
+};

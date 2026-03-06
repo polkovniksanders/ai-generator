@@ -1,23 +1,36 @@
-import { type RouteObject } from 'react-router';
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+import { Layout } from './shared/ui/Layout/Layout';
+import { PageLoader } from './shared/ui/PageLoader';
 
-import { HomePage } from './pages/home/HomePage';
-import { GeneratorPage } from './pages/generator/GeneratorPage';
-import { createBrowserRouter } from 'react-router-dom';
-import { PolicyPage } from './pages/policy/PolicyPage';
-import { CharacterPage } from './pages/characters/ui/CharacterPage';
-import { CharactersPage } from './pages/characters/ui/CharactersPage';
-import { CommonLayout } from './layouts/CommonLayout';
+const HomePage = lazy(() =>
+    import('./pages/home/HomePage').then(m => ({ default: m.HomePage })),
+);
+const GeneratorPage = lazy(() =>
+    import('./pages/generator/GeneratorPage').then(m => ({ default: m.GeneratorPage })),
+);
+const CharactersPage = lazy(() =>
+    import('./pages/characters/CharactersPage').then(m => ({ default: m.CharactersPage })),
+);
+const CharacterPage = lazy(() =>
+    import('./pages/characters/CharacterPage').then(m => ({ default: m.CharacterPage })),
+);
+const PolicyPage = lazy(() =>
+    import('./pages/policy/PolicyPage').then(m => ({ default: m.PolicyPage })),
+);
 
-export const routes: RouteObject[] = [
+const wrap = (el: React.ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>;
+
+const routes: RouteObject[] = [
     {
         path: '/',
-        element: <CommonLayout />,
+        element: <Layout />,
         children: [
-            { index: true, element: <HomePage /> },
-            { path: 'generator', element: <GeneratorPage /> },
-            { path: 'characters', element: <CharactersPage /> },
-            { path: 'characters/:uuid', element: <CharacterPage /> },
-            { path: 'policy', element: <PolicyPage /> },
+            { index: true, element: wrap(<HomePage />) },
+            { path: 'generator', element: wrap(<GeneratorPage />) },
+            { path: 'characters', element: wrap(<CharactersPage />) },
+            { path: 'characters/:uuid', element: wrap(<CharacterPage />) },
+            { path: 'policy', element: wrap(<PolicyPage />) },
         ],
     },
 ];

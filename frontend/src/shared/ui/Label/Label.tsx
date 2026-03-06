@@ -1,12 +1,18 @@
-import { type FC } from 'react';
 import styled from 'styled-components';
 
-export const Label: FC<{ text: string }> = ({ text }) => {
-    return <StyledLabel>{text}</StyledLabel>;
-};
+interface LabelProps {
+    text: string;
+    htmlFor?: string;
+}
 
-const StyledLabel = styled.p`
-    color: ${({ theme }) => theme.colors.white};
-    font-weight: ${({ theme }) => theme.font.weight.heavy};
-    font-size: 16px;
+export const Label = ({ text, htmlFor }: LabelProps) => (
+    <StyledLabel htmlFor={htmlFor}>{text}</StyledLabel>
+);
+
+const StyledLabel = styled.label`
+    font-size: ${({ theme }) => theme.font.size.xs};
+    font-weight: ${({ theme }) => theme.font.weight.medium};
+    color: ${({ theme }) => theme.colors.textSecondary};
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 `;

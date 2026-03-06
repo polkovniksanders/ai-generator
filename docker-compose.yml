@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-aigen}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-aigen}
+      GPTUNNEL_API_KEY: ${GPTUNNEL_API_KEY}
+      GPTUNNEL_BASE_URL: ${GPTUNNEL_BASE_URL:-https://api.gpttunnel.com/v1}
+      GPTUNNEL_TEXT_MODEL: ${GPTUNNEL_TEXT_MODEL:-gpt-4o-mini}
+      GPTUNNEL_IMAGE_MODEL: ${GPTUNNEL_IMAGE_MODEL:-dall-e-2}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-3}
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-14400000}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

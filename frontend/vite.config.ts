@@ -5,13 +5,24 @@ export default defineConfig({
     plugins: [react()],
     server: {
         host: true,
-        port: 8080,
-        allowedHosts: ['berghub.online', 'localhost', '127.0.0.1'],
+        port: 5173,
         proxy: {
             '/api': {
-                target: 'https://ai-generator-backend-3vgu.onrender.com',
+                target: 'http://localhost:3001',
                 changeOrigin: true,
-                rewrite: path => path.replace(/^\/api/, ''),
+            },
+        },
+    },
+    build: {
+        outDir: '../backend/public',
+        emptyOutDir: true,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    react: ['react', 'react-dom'],
+                    router: ['react-router-dom'],
+                    redux: ['@reduxjs/toolkit', 'react-redux'],
+                },
             },
         },
     },
