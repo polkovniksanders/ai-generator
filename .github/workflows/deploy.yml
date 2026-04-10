@@ -19,7 +19,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             set -e
-            cd /root/ai_generator
+            cd /root/ai-generator
 
             echo "→ Pulling latest changes..."
             git pull origin main
